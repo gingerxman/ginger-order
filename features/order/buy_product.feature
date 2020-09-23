@@ -58,9 +58,9 @@ Feature: 购买商品
 			"price": 9.90
 		}]
 		"""
-		Then 结束测试
 
 		Given lucy访问'jobs'的商城
+		Then 结束测试
 		When lucy购买'jobs'的商品
 		"""
 		{
@@ -76,6 +76,7 @@ Feature: 购买商品
 			}]
 		}
 		"""
+		Then 结束测试
 		Then lucy成功创建订单
 		"""
 		{

@@ -9,7 +9,6 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 import unittest
-from features.bdd import util as bdd_util
 
 def __clear_all_account_data():
 	"""
@@ -45,7 +44,7 @@ def before_all(context):
 
 	#创建test case，使用assert
 	context.tc = unittest.TestCase('__init__')
-	bdd_util.tc = context.tc
+	# bdd_util.tc = context.tc
 
 
 def after_all(context):

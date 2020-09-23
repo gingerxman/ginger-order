@@ -12,7 +12,6 @@ import (
 	"github.com/gingerxman/ginger-order/rest/mall/shopping_cart"
 	"github.com/gingerxman/ginger-order/rest/material"
 	"github.com/gingerxman/ginger-order/rest/order"
-	"github.com/gingerxman/ginger-order/rest/product"
 )
 
 func init() {
@@ -23,25 +22,25 @@ func init() {
 	 product
 	 */
 	//category
-	eel.RegisterResource(&product.Category{})
-	eel.RegisterResource(&product.DisabledCategory{})
-	eel.RegisterResource(&product.SubCategories{})
-	//label
-	eel.RegisterResource(&product.ProductLabel{})
-	eel.RegisterResource(&product.ProductLabels{})
-	eel.RegisterResource(&product.CorpProductLabels{})
-	eel.RegisterResource(&product.DisabledCategory{})
-	//property
-	eel.RegisterResource(&product.ProductProperty{})
-	eel.RegisterResource(&product.ProductPropertyValue{})
-	eel.RegisterResource(&product.ProductProperties{})
-	eel.RegisterResource(&product.CorpProductProperties{})
-	//product
-	eel.RegisterResource(&product.Product{})
-	eel.RegisterResource(&product.OffshelfProducts{})
-	eel.RegisterResource(&product.OnshelfProducts{})
-	eel.RegisterResource(&product.CorpProducts{})
-	eel.RegisterResource(&product.CreateOptions{})
+	//eel.RegisterResource(&product.Category{})
+	//eel.RegisterResource(&product.DisabledCategory{})
+	//eel.RegisterResource(&product.SubCategories{})
+	////label
+	//eel.RegisterResource(&product.ProductLabel{})
+	//eel.RegisterResource(&product.ProductLabels{})
+	//eel.RegisterResource(&product.CorpProductLabels{})
+	//eel.RegisterResource(&product.DisabledCategory{})
+	////property
+	//eel.RegisterResource(&product.ProductProperty{})
+	//eel.RegisterResource(&product.ProductPropertyValue{})
+	//eel.RegisterResource(&product.ProductProperties{})
+	//eel.RegisterResource(&product.CorpProductProperties{})
+	////product
+	//eel.RegisterResource(&product.Product{})
+	//eel.RegisterResource(&product.OffshelfProducts{})
+	//eel.RegisterResource(&product.OnshelfProducts{})
+	//eel.RegisterResource(&product.CorpProducts{})
+	//eel.RegisterResource(&product.CreateOptions{})
 	
 	/*
 	 order

@@ -87,6 +87,7 @@ func (this *Order) Get(ctx *eel.Context) {
 func (this *Order) Put(ctx *eel.Context) {
 	bCtx := ctx.GetBusinessContext()
 	purchaseInfo := this.parsePurchaseInfo(ctx)
+	spew.Dump(purchaseInfo)
 	
 	order, err := b_order.NewOrderFactory(bCtx).CreateOrder(purchaseInfo)
 	if err != nil {
