@@ -89,7 +89,7 @@ func (this *CouponRepository) GetCouponsForUser(user *account.User, page *eel.Pa
 }
 
 //GetCouponsForUserAndProducts 获得启用的Coupon对象集合
-func (this *CouponRepository) GetCouponsForUserAndProducts(user *account.User, poolProducts []*product.PoolProduct) []*Coupon {
+func (this *CouponRepository) GetCouponsForUserAndProducts(user *account.User, products []*product.Product) []*Coupon {
 	page := &eel.PageInfo{
 		Page: 1,
 		CountPerPage: 999,
@@ -102,9 +102,9 @@ func (this *CouponRepository) GetCouponsForUserAndProducts(user *account.User, p
 	
 	//根据pool product ids过滤coupon
 	id2exist := make(map[int]bool)
-	for _, poolProduct := range poolProducts {
-		id2exist[poolProduct.Id] = true
-		id2exist[poolProduct.SourcePoolProductId] = true
+	for _, product := range products {
+		id2exist[product.Id] = true
+		id2exist[product.SourceProductId] = true
 	}
 	
 	NewFillCouponService(this.Ctx).Fill(coupons, eel.FillOption{

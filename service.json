@@ -1,5 +1,5 @@
 {
 	"name": "ginger-order",
 	"type": "golang-service",
-	"default_port": 3134
+	"default_port": 3135
 }

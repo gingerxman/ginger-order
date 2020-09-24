@@ -21,17 +21,17 @@ func (this *MergeSameSkuProductService) Merge(resources []business.IResource) []
 	
 	for _, productResource := range resources {
 		rawProductResource := productResource.GetRawResourceObject().(*ProductResource)
-		poolProduct := rawProductResource.GetPoolProduct()
+		product := rawProductResource.GetProduct()
 		
 		var ok bool
 		var merged *SkuMergedProduct
-		productId := poolProduct.Id
+		productId := product.Id
 		if merged, ok = product2merged[productId]; !ok {
 			merged = &SkuMergedProduct{
 				TotalCount: 0,
 				TotalPrice: 0.0,
 				// TotalWeight: 0.0,
-				PoolProduct: poolProduct,
+				PoolProduct: product,
 			}
 			product2merged[productId] = merged
 		}

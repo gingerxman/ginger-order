@@ -4,7 +4,6 @@ import (
 	"context"
 	
 	"github.com/gingerxman/eel"
-	"github.com/gingerxman/ginger-order/business/product"
 	m_order "github.com/gingerxman/ginger-order/models/order"
 )
 
@@ -43,22 +42,10 @@ func (this *OrderProductRepository) GetOrderProducts(invoiceIds []int) []*OrderP
 		product.Thumbnail = model.Thumbnail
 		product.Weight = model.Weight
 		product.OrderId = model.OrderId
+		product.SupplierId = model.SupplierId
 		
 		orderProducts = append(orderProducts, product)
 		productIds = append(productIds, model.ProductId)
-	}
-	
-	//填充SupplierId
-	products := product.NewProductRepository(this.Ctx).GetProductsByIds(productIds)
-	id2product := make(map[int]*product.Product, 0)
-	for _, product := range products {
-		id2product[product.Id] = product
-	}
-	
-	for _, orderProduct := range orderProducts {
-		if product, ok := id2product[orderProduct.ProductId]; ok {
-			orderProduct.SupplierId = product.CorpId
-		}
 	}
 	
 	return orderProducts

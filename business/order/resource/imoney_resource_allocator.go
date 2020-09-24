@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business"
@@ -56,8 +55,6 @@ func (this *IMoneyResourceAllocator) Allocate(resource business.IResource, newOr
 		}
 	}
 	
-	spew.Dump(imoneyResource)
-
 	return nil
 }
 

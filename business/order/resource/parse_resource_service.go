@@ -42,7 +42,7 @@ func (this *ParseResourceService) ParseFromOrderResources(resourcesData []map[st
 		resources = append(resources, productResource)
 	}
 
-	supplierId := productResources[0].GetPoolProduct().SupplierId
+	supplierId := productResources[0].GetProduct().SupplierId
 	user := account.GetUserFromContext(this.Ctx)
 	imoneyResources := this.parseIMoneyResource(imoneyArray, user.Id, supplierId)
 	for _, imoneyResource := range imoneyResources{
@@ -94,7 +94,7 @@ func (this *ParseResourceService) Parse(salesmanId int, productsArray []interfac
 		productResource.SalesmanId = salesmanId
 	}
 	
-	supplierId := productResources[0].GetPoolProduct().SupplierId
+	supplierId := productResources[0].GetProduct().SupplierId
 	user := account.GetUserFromContext(this.Ctx)
 	//解析imoney resource
 	imoneyResources := this.parseIMoneyResource(imoneysArray, user.Id, supplierId)
@@ -103,10 +103,10 @@ func (this *ParseResourceService) Parse(salesmanId int, productsArray []interfac
 	}
 	
 	if couponUsage != nil {
-		couponResource := this.parseCouponResource(couponUsage, productResources)
-		if couponResource != nil {
-			resources = append(resources, couponResource)
-		}
+		//couponResource := this.parseCouponResource(couponUsage, productResources)
+		//if couponResource != nil {
+		//	resources = append(resources, couponResource)
+		//}
 	}
 	
 	return resources
@@ -144,21 +144,15 @@ func (this *ParseResourceService) fillProductResources(productResources []*Produ
 		poolProductIds = append(poolProductIds, productResource.PoolProductId)
 	}
 	
-	poolProducts := product.GetGlobalProductPool(this.Ctx).GetPoolProductsByIds(poolProductIds)
-	product.NewFillPoolProductService(this.Ctx).Fill(poolProducts, eel.FillOption{
-		"with_sku": true,
-		"with_logistics": true,
-	})
-	
-	//为productResource设置poolProduct
-	id2product := make(map[int]*product.PoolProduct)
-	for _, poolProduct := range poolProducts {
-		id2product[poolProduct.Id] = poolProduct
+	//set productResource.Product
+	products := product.NewProductRepository(this.Ctx).GetProducts(poolProductIds)
+	id2product := make(map[int]*product.Product)
+	for _, product := range products {
+		id2product[product.Id] = product
 	}
-	
 	for _, productResource := range productResources {
 		if poolProduct, ok := id2product[productResource.PoolProductId]; ok {
-			productResource.SetPoolProduct(poolProduct)
+			productResource.SetProduct(poolProduct)
 		}
 	}
 }
@@ -189,28 +183,28 @@ func (this *ParseResourceService) parseIMoneyResource(imoneysArray []interface{}
 	return resources
 }
 
-func (this *ParseResourceService) parseCouponResource(couponUsage *CouponUsage, productResources []*ProductResource) *CouponResource {
-	poolProductIds := make([]int, 0)
-	for _, productResource := range productResources {
-		poolProduct := productResource.GetPoolProduct()
-		poolProductId := 0
-		if poolProduct.IsSelfProduct() {
-			poolProductId = poolProduct.Id
-		} else {
-			poolProductId = poolProduct.SourcePoolProductId
-		}
-		
-		poolProductIds = append(poolProductIds, poolProductId)
-	}
-	
-	resource := CouponResource{
-		Code: couponUsage.Code,
-		poolProductIds: poolProductIds,
-	}
-	resource.Ctx = this.Ctx
-	
-	return &resource
-}
+//func (this *ParseResourceService) parseCouponResource(couponUsage *CouponUsage, productResources []*ProductResource) *CouponResource {
+//	poolProductIds := make([]int, 0)
+//	for _, productResource := range productResources {
+//		poolProduct := productResource.GetPoolProduct()
+//		poolProductId := 0
+//		if poolProduct.IsSelfProduct() {
+//			poolProductId = poolProduct.Id
+//		} else {
+//			poolProductId = poolProduct.SourcePoolProductId
+//		}
+//
+//		poolProductIds = append(poolProductIds, poolProductId)
+//	}
+//
+//	resource := CouponResource{
+//		Code: couponUsage.Code,
+//		poolProductIds: poolProductIds,
+//	}
+//	resource.Ctx = this.Ctx
+//
+//	return &resource
+//}
 
 func init() {
 }

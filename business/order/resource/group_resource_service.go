@@ -51,8 +51,8 @@ func (this *GroupResourceService) groupProductResources(productResources []busin
 	
 	for _, productResource := range productResources {
 		rawProductResource := productResource.GetRawResourceObject().(*ProductResource)
-		poolProduct := rawProductResource.GetPoolProduct()
-		supplierId := poolProduct.SupplierId
+		product := rawProductResource.GetProduct()
+		supplierId := product.SupplierId
 		
 		var group *ResourceGroup
 		var ok bool

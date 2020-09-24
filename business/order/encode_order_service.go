@@ -36,6 +36,7 @@ func (this *EncodeOrderService) Encode(order *Order) *ROrder {
 		}
 		rOperationLogs = append(rOperationLogs, rOperationLog)
 	}
+	
 	rStatusLogs:= make([]*RStatusLog, 0)
 	for _, statusLog := range order.StatusLogs {
 		rStatusLog := &RStatusLog{

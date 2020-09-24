@@ -100,8 +100,9 @@ func (self *Order) TableName() string {
 type OrderHasProduct struct {
 	eel.Model
 	OrderId int `gorm:index`
-	PoolProductId int `gorm:index`
+	SupplierId int // 供货商corp id
 	ProductId int `gorm:index`
+	RawProductId int `gorm:index`
 	ProductName string
 	ProductSkuName string
 	ProductSkuDisplayName string

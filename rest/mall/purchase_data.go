@@ -80,14 +80,14 @@ func (this *PurchaseData) parseProductInfo(productInfosStr string) []*_ProductIn
 	return productInfos
 }
 
-func (this *PurchaseData) getProductDatas(ctx *eel.Context) ([]*product.PoolProduct, []eel.Map) {
+func (this *PurchaseData) getProductDatas(ctx *eel.Context) ([]*product.Product, []eel.Map) {
 	bCtx := ctx.GetBusinessContext()
 	req := ctx.Request
 	
 	productDatas := make([]eel.Map, 0)
 	
 	productInfosStr := req.GetString("product_infos", "")
-	poolProducts := make([]*product.PoolProduct, 0)
+	poolProducts := make([]*product.Product, 0)
 	if productInfosStr != "" {
 		productInfos := this.parseProductInfo(productInfosStr)
 		sku2info := make(map[string]*_ProductInfo)
@@ -99,40 +99,28 @@ func (this *PurchaseData) getProductDatas(ctx *eel.Context) ([]*product.PoolProd
 		}
 		
 		//获取pool products
-		poolProducts = product.GetGlobalProductPool(bCtx).GetPoolProductsByIds(poolProductIds)
-		product.NewFillPoolProductService(bCtx).Fill(poolProducts, eel.FillOption{
-			"with_sku": true,
-			"with_logistics": true,
-		})
-		id2product := make(map[int]*product.PoolProduct, 0)
+		poolProducts := product.NewProductRepository(bCtx).GetProducts(poolProductIds)
+		id2product := make(map[int]*product.Product, 0)
 		for _, poolProduct := range poolProducts {
 			id2product[poolProduct.Id] = poolProduct
-		}
-		
-		//获取pool product的编码结果集合
-		encodedProducts := product.NewEncodePoolProductService(bCtx).EncodeMany(poolProducts)
-		id2eproduct := make(map[int]*product.RPoolProduct, 0)
-		for _, eproduct := range encodedProducts {
-			id2eproduct[eproduct.Id] = eproduct
 		}
 		
 		//构建product datas
 		//用户可能购买相同product id，但不同sku的商品，上面获取商品数据时，进行了id去重，这里要通过原始的productInfos数据构造返回的结果数据
 		for _, productInfo := range productInfos {
-			poolProduct := id2product[productInfo.Id]
-			encodedProduct := id2eproduct[productInfo.Id]
+			product := id2product[productInfo.Id]
 			
-			productSku := poolProduct.GetSku(productInfo.SkuName)
+			productSku := product.GetSku(productInfo.SkuName)
 			productDatas = append(productDatas, eel.Map{
-				"id": encodedProduct.Id,
+				"id": product.Id,
 				"count": productInfo.Count,
-				"name": encodedProduct.BaseInfo.Name,
+				"name": product.Name,
 				"price": productSku.Price,
-				"thumbnail": encodedProduct.BaseInfo.Thumbnail,
+				"thumbnail": product.Thumbnail,
 				"sku": productInfo.SkuName,
-				"sku_display_name": productSku.GetDisplayName(),
+				"sku_display_name": productSku.Name, // productSku.GetDisplayName(),
 				//"weight": productSku.Weight,
-				"logistics_info": encodedProduct.LogisticsInfo,
+				"logistics_info": "not implemented", // product.LogisticsInfo,
 				"payable_imoneys": make([]int, 0),
 			})
 		}

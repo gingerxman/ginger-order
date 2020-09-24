@@ -4,7 +4,6 @@ import (
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business/account"
 	"github.com/gingerxman/ginger-order/business/order"
-	"github.com/davecgh/go-spew/spew"
 )
 
 type UserOrders struct {
@@ -28,8 +27,7 @@ func (this *UserOrders) Get(ctx *eel.Context) {
 
 	filters := req.GetOrmFilters()
 	pageInfo := req.GetPageInfo().Desc()
-	spew.Dump(pageInfo)
-
+	
 	corp := account.GetCorpFromContext(bCtx)
 	user := account.GetUserFromContext(bCtx)
 

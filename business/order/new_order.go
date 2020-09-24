@@ -8,7 +8,6 @@ import (
 	"github.com/gingerxman/eel/snowflake"
 	"github.com/gingerxman/ginger-order/business"
 	"github.com/gingerxman/ginger-order/business/account"
-	"github.com/gingerxman/ginger-order/business/mall/shopping_cart"
 	"github.com/gingerxman/ginger-order/business/order/resource"
 	m_order "github.com/gingerxman/ginger-order/models/order"
 	"context"
@@ -81,7 +80,7 @@ func (this *NewOrder) saveOrderInDb(saveType string, resources []business.IResou
 	} else {
 		model.Bid = this.generateBid()
 		model.OriginalOrderId = parentOrder.Id
-		model.SupplierId = resources[0].(*resource.ProductResource).GetPoolProduct().SupplierId
+		model.SupplierId = resources[0].(*resource.ProductResource).GetProduct().SupplierId
 	}
 	
 	shipInfo := purchaseInfo.ShipInfo
@@ -175,9 +174,9 @@ func (this *NewOrder) Save() (*Order, error) {
 	}
 	
 	//如果是从购物车发起的购买行为，购买成功后需要删除购物车项
-	if purchaseInfo.IsFromShoppingCart() {
-		shopping_cart.NewShoppingCartService(this.Ctx).DeleteShoppingCartItems(purchaseInfo.ShoppingCartItemIds)
-	}
+	//if purchaseInfo.IsFromShoppingCart() {
+	//	shopping_cart.NewShoppingCartService(this.Ctx).DeleteShoppingCartItems(purchaseInfo.ShoppingCartItemIds)
+	//}
 	return order, nil
 }
 

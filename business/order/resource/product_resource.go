@@ -8,10 +8,7 @@ import (
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business"
 	"github.com/gingerxman/ginger-order/business/product"
-	b_product "github.com/gingerxman/ginger-order/business/product"
 	m_order "github.com/gingerxman/ginger-order/models/order"
-	"strconv"
-	"strings"
 )
 
 type ProductResource struct {
@@ -23,7 +20,7 @@ type ProductResource struct {
 	Count int
 	SalesmanId int
 	Price int
-	poolProduct *product.PoolProduct
+	product *product.Product
 }
 
 func (this *ProductResource) GetType() string {
@@ -39,12 +36,12 @@ func (this *ProductResource) GetDeductionMoney(deductableMoney int) int {
 }
 
 func (this *ProductResource) GetPrice() int {
-	return this.poolProduct.GetSku(this.Sku).Price * this.Count
+	return this.product.GetSku(this.Sku).Price * this.Count
 }
 
 func (this *ProductResource) GetPostage() int {
-	if this.poolProduct.UseUnifiedPostage() {
-		return this.poolProduct.GetUnifiedPostageMoney()
+	if this.product.UseUnifiedPostage() {
+		return this.product.GetUnifiedPostageMoney()
 	} else {
 		return 0
 	}
@@ -66,17 +63,16 @@ func (this *ProductResource) ToMap() map[string]interface{} {
 	productInfo := make(map[string]interface{})
 	productResourceInfo := make(map[string]interface{})
 	
-	poolProduct := this.poolProduct
-	product := poolProduct.Product
-	sku := poolProduct.GetSku(this.Sku)
+	product := this.product
+	sku := product.GetSku(this.Sku)
 	
+	productInfo["raw_product_id"] = product.RawProductId
 	productInfo["id"] = product.Id
-	productInfo["pool_product_id"] = poolProduct.Id
 	productInfo["name"] = product.Name
 	productInfo["thumbnail"] = product.Thumbnail
 	productInfo["price"] = sku.Price
 	productInfo["sku_name"] = this.Sku
-	productInfo["sku_display_name"] = sku.Name
+	productInfo["sku_display_name"] = sku.DisplayName
 	
 	productResourceInfo["type"] = this.GetType()
 	productResourceInfo["count"] = this.Count
@@ -89,33 +85,34 @@ func (this *ProductResource) ToMap() map[string]interface{} {
 }
 
 func (this *ProductResource) SaveForOrder(order business.IOrder) error {
-	poolProduct := this.poolProduct
-	product := poolProduct.Product
-	sku := poolProduct.GetSku(this.Sku)
+	product := this.product
+	sku := product.GetSku(this.Sku)
 	
 	model := &m_order.OrderHasProduct{}
 	model.OrderId = order.GetId()
+	model.SupplierId = product.SupplierId
 	model.ProductId = product.Id
-	model.PoolProductId = poolProduct.Id
+	model.RawProductId = product.RawProductId
 	model.ProductName = product.Name
 	model.Thumbnail = product.Thumbnail
 	model.Count = this.Count
 	model.Price = sku.Price
 	model.ProductSkuName = this.Sku
+	model.ProductSkuDisplayName = sku.DisplayName
 	
 	//获得sku display name
 	if this.Sku == "standard" {
 		model.ProductSkuDisplayName = "standard"
 	} else {
-		names := make([]string, 0)
-		propertyRepository := b_product.NewProductPropertyRepository(this.Ctx)
-		items := strings.Split(sku.Name, "_")
-		for _, item := range items {
-			valueId, _ := strconv.Atoi(strings.Split(item, ":")[1])
-			propertyValue := propertyRepository.GetProductPropertyValue(valueId)
-			names = append(names, propertyValue.Text)
-		}
-		model.ProductSkuDisplayName = strings.Join(names, " ")
+		//names := make([]string, 0)
+		//propertyRepository := b_product.NewProductPropertyRepository(this.Ctx)
+		//items := strings.Split(sku.Name, "_")
+		//for _, item := range items {
+		//	valueId, _ := strconv.Atoi(strings.Split(item, ":")[1])
+		//	propertyValue := propertyRepository.GetProductPropertyValue(valueId)
+		//	names = append(names, propertyValue.Text)
+		//}
+		//model.ProductSkuDisplayName = strings.Join(names, " ")
 	}
 	
 	o := eel.GetOrmFromContext(this.Ctx)
@@ -134,12 +131,12 @@ func (this *ProductResource) IsValid() error {
 		return errors.New("invalid_purchase_count")
 	}
 	
-	if !this.poolProduct.CanPurchase() {
+	if !this.product.CanPurchase() {
 		eel.Logger.Error(fmt.Sprintf("商品已下架(%d)", this.Count))
 		return errors.New("product_off_shelve")
 	}
 	
-	sku := this.poolProduct.GetSku(this.Sku)
+	sku := this.product.GetSku(this.Sku)
 	if sku == nil {
 		eel.Logger.Error(fmt.Sprintf("错误的sku(%s)", this.Sku))
 		return errors.New("invalid_sku")
@@ -170,16 +167,12 @@ func (this *ProductResource) ResetAllocation(){
 	this.Resource.ResetAllocation()
 }
 
-func (this *ProductResource) GetPoolProduct() *product.PoolProduct {
-	if (this.poolProduct == nil) {
-		this.poolProduct = product.GetGlobalProductPool(this.Ctx).GetPoolProduct(this.PoolProductId)
-	}
-	
-	return this.poolProduct
+func (this *ProductResource) GetProduct() *product.Product {
+	return this.product
 }
 
-func (this *ProductResource) SetPoolProduct(poolProduct *product.PoolProduct) {
-	this.poolProduct = poolProduct;
+func (this *ProductResource) SetProduct(product *product.Product) {
+	this.product = product
 }
 
 func NewProductResource(ctx context.Context) *ProductResource {

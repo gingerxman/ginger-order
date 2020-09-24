@@ -33,7 +33,6 @@ func (this *Order) GetParameters() map[string][]string {
 			"?settlement_rule:json",
 			"?salesman_id:int",
 			"?extra_data:json",
-			"?no_resettle:bool",
 		},
 	}
 }
@@ -138,7 +137,7 @@ func (this *Order) parseCouponUsage(ctx *eel.Context) *resource.CouponUsage {
 }
 
 // parseExtraData extra_data中的参数做兼容
-// callback_resource、source_service、settlement_rule、no_resettle应该放在extra_data中
+// callback_resource、source_service、settlement_rule应该放在extra_data中
 // 如果外部有参数，则使用外部参数覆盖extra_data中的对应值
 func (this *Order) parseExtraData(ctx *eel.Context) map[string]interface{}{
 	req := ctx.Request
@@ -158,10 +157,6 @@ func (this *Order) parseExtraData(ctx *eel.Context) map[string]interface{}{
 	settlementRule := req.GetJSON("settlement_rule")
 	if settlementRule != nil && len(settlementRule)>0{
 		extraData["settlement_rule"] = settlementRule
-	}
-	noResettle, _ := req.GetBool("no_resettle", false)
-	if _, ok := extraData["no_resettle"]; !ok{
-		extraData["no_resettle"] = noResettle
 	}
 
 	return extraData
@@ -193,7 +188,6 @@ func (this *Order) parsePurchaseInfo(ctx *eel.Context) *b_order.PurchaseInfo {
 	purchaseInfo.BizCode = bizCode
 	purchaseInfo.SalesmanId, _ = req.GetInt("salesman_id", 0)
 	purchaseInfo.ShoppingCartItemIds = req.GetIntArray("shopping_cart_item_ids")
-	spew.Dump(purchaseInfo)
 	
 	productsArray := req.GetJSONArray("products")
 	imoneysArray := req.GetJSONArray("imoney_usages")

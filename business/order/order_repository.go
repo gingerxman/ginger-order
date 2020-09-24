@@ -3,7 +3,6 @@ package order
 import (
 	"context"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business"
@@ -148,7 +147,6 @@ func (this *OrderRepository) GetPagedOrders(filters eel.Map, page *eel.PageInfo,
 		db = db.Order(expr)
 	}
 	
-	spew.Dump(page)
 	paginateResult, db := eel.Paginate(db, page, &models)
 	err := db.Error
 	if err != nil {
@@ -233,7 +231,6 @@ func (this *OrderRepository) GetPagedOrdersForUserInCorp(user business.IUser, co
 			filters["type"] = m_order.ORDER_TYPE_PRODUCT_INVOICE
 		}
 	}
-	spew.Dump(filters)
 	
 	return this.GetPagedOrders(filters, page, orderExprs...)
 }

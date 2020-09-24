@@ -48,7 +48,7 @@ Feature: 购买商品
 
 		Given lucy注册为App用户
 
-	@ginger-order @order @wip
+	@ginger-order @order
 	Scenario: 1. App用户能购买单个商品
 		Given jobs登录系统
 		When jobs添加商品
@@ -60,7 +60,6 @@ Feature: 购买商品
 		"""
 
 		Given lucy访问'jobs'的商城
-		Then 结束测试
 		When lucy购买'jobs'的商品
 		"""
 		{
@@ -76,7 +75,6 @@ Feature: 购买商品
 			}]
 		}
 		"""
-		Then 结束测试
 		Then lucy成功创建订单
 		"""
 		{

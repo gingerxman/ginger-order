@@ -3,7 +3,6 @@ package account
 import (
 	"context"
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gingerxman/eel"
 )
 
@@ -45,7 +44,6 @@ func (this *CorpUserRepository) GetCorpUsers(ids []int) []*CorpUser {
 
 	respData := resp.Data()
 	userDatas := respData.Get("corp_users")
-	spew.Dump(userDatas)
 	return this.makeCorpUsers(userDatas.MustArray())
 }
 

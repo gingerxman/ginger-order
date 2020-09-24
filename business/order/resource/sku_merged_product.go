@@ -11,7 +11,7 @@ type SkuMergedProduct struct {
 	TotalCount int
 	TotalWeight float64
 	TotalPrice float64
-	PoolProduct *product.PoolProduct
+	PoolProduct *product.Product
 }
 
 func init() {

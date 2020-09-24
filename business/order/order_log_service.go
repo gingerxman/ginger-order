@@ -3,7 +3,6 @@ package order
 import (
 	"context"
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business/account"
@@ -143,8 +142,6 @@ func (this *OrderLogService) LogOperation(operationData *OperationData) {
 			operationType = m_order.ORDER_OPERATION_TYPE_SYSTEM
 		} else {
 			user := account.GetUserFromContext(this.Ctx)
-			spew.Dump(user)
-			spew.Dump(user.Id)
 			corpUsers := account.NewCorpUserRepository(this.Ctx).GetCorpUsers([]int{user.Id})
 			operator = "operator"
 			if corpUsers != nil && len(corpUsers) > 0 {

@@ -15,7 +15,7 @@ Feature: 购买商品后完成订单
 		}]
 		"""
 
-	@ginger-order @order
+	@ginger-order @order @wip
 	Scenario: 1. 手机购买单个商品，完成订单，进行清算
 		Given jobs登录系统
 		Then jobs能获得公司的虚拟资产'cash'

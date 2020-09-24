@@ -2,11 +2,10 @@ package resource
 
 import (
 	"context"
-	"github.com/gingerxman/gorm"
 	"github.com/gingerxman/eel"
+	"github.com/gingerxman/ginger-order/business/product"
 	
 	"github.com/gingerxman/ginger-order/business"
-	m_product "github.com/gingerxman/ginger-order/models/product"
 )
 
 type ProductResourceAllocator struct {
@@ -22,14 +21,12 @@ func NewProductResourceAllocator(ctx context.Context) business.IResourceAllocato
 //Allocate 申请商品资源，减少库存
 func (this *ProductResourceAllocator) Allocate(resource business.IResource, newOrder business.IOrder) error {
 	productResource := resource.(*ProductResource)
+	sku := productResource.GetProduct().GetSku(productResource.Sku)
 	
-	o := eel.GetOrmFromContext(this.Ctx)
-	sku := productResource.GetPoolProduct().GetSku(productResource.Sku)
-	
-	db := o.Model(&m_product.ProductSku{}).Where("id", sku.Id).Update("stocks", gorm.Expr("stocks - ?", productResource.Count))
-	if db.Error != nil {
-		eel.Logger.Error(db.Error)
-		return db.Error
+	err := product.NewProductRepository(this.Ctx).UseSkuStocks(sku.Id, productResource.Count)
+	if err != nil {
+		eel.Logger.Error(err)
+		return err
 	}
 	
 	return nil
@@ -38,14 +35,11 @@ func (this *ProductResourceAllocator) Allocate(resource business.IResource, newO
 //Release 释放商品资源，恢复库存
 func (this *ProductResourceAllocator) Release(resource business.IResource) {
 	productResource := resource.(*ProductResource)
+	sku := productResource.GetProduct().GetSku(productResource.Sku)
 	
-	o := eel.GetOrmFromContext(this.Ctx)
-	sku := productResource.GetPoolProduct().GetSku(productResource.Sku)
-	
-	db := o.Model(&m_product.ProductSku{}).Where("id", sku.Id).Update("stocks", gorm.Expr("stocks + ?", productResource.Count))
-	
-	if db.Error != nil {
-		eel.Logger.Error(db.Error)
+	err := product.NewProductRepository(this.Ctx).AddSkuStocks(sku.Id, productResource.Count)
+	if err != nil {
+		eel.Logger.Error(err)
 	}
 }
 

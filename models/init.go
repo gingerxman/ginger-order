@@ -8,11 +8,11 @@ import (
 
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/eel/config"
-	_ "github.com/gingerxman/ginger-order/models/product"
+	//_ "github.com/gingerxman/ginger-order/models/product"
 	_ "github.com/gingerxman/ginger-order/models/order"
 	_ "github.com/gingerxman/ginger-order/models/mall"
-	_ "github.com/gingerxman/ginger-order/models/material"
-	_ "github.com/gingerxman/ginger-order/models/coupon"
+	//_ "github.com/gingerxman/ginger-order/models/material"
+	//_ "github.com/gingerxman/ginger-order/models/coupon"
 )
 
 var Db *gorm.DB
