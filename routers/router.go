@@ -9,37 +9,12 @@ import (
 	"github.com/gingerxman/ginger-order/rest/dev"
 	"github.com/gingerxman/ginger-order/rest/mall"
 	"github.com/gingerxman/ginger-order/rest/mall/ship_info"
-	"github.com/gingerxman/ginger-order/rest/material"
 	"github.com/gingerxman/ginger-order/rest/order"
 )
 
 func init() {
 	eel.RegisterResource(&console.Console{})
 	eel.RegisterResource(&op.Health{})
-	
-	/*
-	 product
-	 */
-	//category
-	//eel.RegisterResource(&product.Category{})
-	//eel.RegisterResource(&product.DisabledCategory{})
-	//eel.RegisterResource(&product.SubCategories{})
-	////label
-	//eel.RegisterResource(&product.ProductLabel{})
-	//eel.RegisterResource(&product.ProductLabels{})
-	//eel.RegisterResource(&product.CorpProductLabels{})
-	//eel.RegisterResource(&product.DisabledCategory{})
-	////property
-	//eel.RegisterResource(&product.ProductProperty{})
-	//eel.RegisterResource(&product.ProductPropertyValue{})
-	//eel.RegisterResource(&product.ProductProperties{})
-	//eel.RegisterResource(&product.CorpProductProperties{})
-	////product
-	//eel.RegisterResource(&product.Product{})
-	//eel.RegisterResource(&product.OffshelfProducts{})
-	//eel.RegisterResource(&product.OnshelfProducts{})
-	//eel.RegisterResource(&product.CorpProducts{})
-	//eel.RegisterResource(&product.CreateOptions{})
 	
 	/*
 	 order
@@ -70,11 +45,6 @@ func init() {
 	eel.RegisterResource(&ship_info.ShipInfo{})
 	eel.RegisterResource(&ship_info.ShipInfos{})
 	eel.RegisterResource(&ship_info.DefaultShipInfo{})
-	
-	/*
-	 material
-	*/
-	eel.RegisterResource(&material.Image{})
 	
 	/*
 	 area
