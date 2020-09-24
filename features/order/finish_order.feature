@@ -1,5 +1,19 @@
 Feature: 购买商品后完成订单
 	Background:
+		Given 系统配置虚拟资产
+		"""
+		[{
+			"code": "rmb",
+			"exchange_rate": 1,
+			"is_debtable": true,
+			"is_payable": false
+		}, {
+			"code": "cash",
+			"display_name": "现金",
+			"exchange_rate": 1
+		}]
+		"""
+
 		Given ginger登录系统
 		When ginger创建公司
 		"""
@@ -15,7 +29,7 @@ Feature: 购买商品后完成订单
 		}]
 		"""
 
-	@ginger-order @order @wip
+	@ginger-order @order
 	Scenario: 1. 手机购买单个商品，完成订单，进行清算
 		Given jobs登录系统
 		Then jobs能获得公司的虚拟资产'cash'
