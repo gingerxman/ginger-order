@@ -4,7 +4,6 @@ import (
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/eel/handler/rest/console"
 	"github.com/gingerxman/eel/handler/rest/op"
-	"github.com/gingerxman/ginger-order/rest/area"
 	"github.com/gingerxman/ginger-order/rest/consumption"
 	"github.com/gingerxman/ginger-order/rest/dev"
 	"github.com/gingerxman/ginger-order/rest/mall"
@@ -45,13 +44,6 @@ func init() {
 	eel.RegisterResource(&ship_info.ShipInfo{})
 	eel.RegisterResource(&ship_info.ShipInfos{})
 	eel.RegisterResource(&ship_info.DefaultShipInfo{})
-	
-	/*
-	 area
-	 */
-	eel.RegisterResource(&area.Area{})
-	eel.RegisterResource(&area.AreaCode{})
-	eel.RegisterResource(&area.YouzanAreaList{})
 
 	/*
 	 dev
