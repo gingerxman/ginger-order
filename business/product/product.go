@@ -21,6 +21,12 @@ func (this *sku) CanAffordStock(stock int) bool {
 	return false
 }
 
+type sLogisticsInfo struct {
+	LimitZoneType string `json:"limit_zone_type"`
+	PostageType string `json:"postage_type"`
+	UnifiedPostageMoney int `json:"unified_postage_money"`
+}
+
 
 type Product struct {
 	eel.EntityBase
@@ -36,9 +42,7 @@ type Product struct {
 	IsDeleted bool
 	
 	//logistics info
-	PostageType string
-	UnifiedPostageMoney int
-	LimitZoneType string
+	LogisticsInfo *sLogisticsInfo
 
 	//foreign key
 	ProductUsableImoneyId int //refer to product_usable_imoney
@@ -57,11 +61,11 @@ func (this *Product) GetSku(skuName string) *sku {
 }
 
 func (this *Product) UseUnifiedPostage() bool {
-	return this.PostageType == "unified"
+	return this.LogisticsInfo.PostageType == "unified"
 }
 
 func (this *Product) GetUnifiedPostageMoney() int {
-	return this.UnifiedPostageMoney
+	return this.LogisticsInfo.UnifiedPostageMoney
 }
 
 func (this *Product) CanPurchase() bool {

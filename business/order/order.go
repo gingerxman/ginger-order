@@ -86,6 +86,10 @@ func (this *Order) GetStatusText() string{
 	}
 }
 
+func (this *Order) GetTypeText() string{
+	return this.Type
+}
+
 func (this *Order) GetResources() []map[string]interface{}{
 	//var resources []map[string]interface{}
 	//err := json.Unmarshal([]byte(this.Resources), &resources)

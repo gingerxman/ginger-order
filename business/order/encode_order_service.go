@@ -63,6 +63,7 @@ func (this *EncodeOrderService) Encode(order *Order) *ROrder {
 		Bid: order.Bid,
 		CorpId: order.CorpId,
 		UserId: order.UserId,
+		Type: order.GetTypeText(),
 		Status: order.GetStatusText(),
 		Invoices: rInvoices,
 		Resources: order.GetResources(),

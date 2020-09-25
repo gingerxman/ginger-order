@@ -5,6 +5,7 @@ type ROrder struct {
 	Bid string `json:"bid"`
 	CorpId int `json:"corp_id"`
 	UserId int `json:"user_id"`
+	Type string `json:"type"`
 	Status string `json:"status"`
 	FinalMoney int `json:"final_money"`
 	Invoices []*RInvoice `json:"invoices"`
@@ -53,6 +54,7 @@ type RInvoiceLogistics struct {
 type RInvoice struct {
 	Id int `json:"id"`
 	Bid string `json:"bid"`
+	Type string `json:"type"`
 	Status string `json:"status"`
 	PaymentType string `json:"payment_type"`
 	PaymentTime string `json:"payment_time"`

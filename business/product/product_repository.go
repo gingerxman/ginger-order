@@ -42,9 +42,11 @@ func (this *ProductRepository) makeProducts(productDatas []interface{}) []*Produ
 			Thumbnail: baseInfo["thumbnail"].(string),
 			
 			IsDeleted: isDeleted,
-			PostageType: logisticsInfo["postage_type"].(string),
-			UnifiedPostageMoney: int(unifiedPostageMoney64),
-			LimitZoneType: logisticsInfo["limit_zone_type_code"].(string),
+			LogisticsInfo: &sLogisticsInfo{
+				PostageType: logisticsInfo["postage_type"].(string),
+				UnifiedPostageMoney: int(unifiedPostageMoney64),
+				LimitZoneType: logisticsInfo["limit_zone_type_code"].(string),
+			},
 		}
 		
 		skuDatas := productData["skus"].([]interface{})

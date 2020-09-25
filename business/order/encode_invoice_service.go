@@ -102,6 +102,7 @@ func (this *EncodeInvoiceService) Encode(invoice *Invoice) *RInvoice {
 	return &RInvoice{
 		Id: invoice.Id,
 		Bid: invoice.Bid,
+		Type: invoice.GetTypeText(),
 		Status: invoice.GetStatusText(),
 		Postage: invoice.Money.Postage,
 		FinalMoney: invoice.Money.FinalMoney,
