@@ -2,7 +2,6 @@ package consumption
 
 import (
 	"github.com/gingerxman/eel"
-	"github.com/gingerxman/ginger-order/business/account"
 	"github.com/gingerxman/ginger-order/business/consumption"
 )
 
@@ -16,7 +15,7 @@ func (this *UserConsumptionRecords) Resource() string {
 
 func (this *UserConsumptionRecords) GetParameters() map[string][]string {
 	return map[string][]string{
-		"GET": []string{"?filters:json"},
+		"GET": []string{"user_ids:json-array"},
 	}
 }
 
@@ -25,19 +24,14 @@ func (this *UserConsumptionRecords) Get(ctx *eel.Context) {
 	req := ctx.Request
 	bCtx := ctx.GetBusinessContext()
 
-	filters := req.GetOrmFilters()
-	pageInfo := req.GetPageInfo()
-
-	corp := account.GetCorpFromContext(bCtx)
-	filters["corp_id"] = corp.Id
-	records, nextPageInfo := consumption.NewConsumptionRecordRepository(bCtx).GetPagedOrders(filters, pageInfo, "-updated_at")
+	userIds := req.GetIntArray("user_ids")
+	records := consumption.NewConsumptionRecordRepository(bCtx).GetRecordsForUsers(userIds)
 
 	consumption.NewFillConsumptionRecordService(bCtx).Fill(records, eel.Map{})
 	datas := consumption.NewEncodeConsumptionRecordService(bCtx).EncodeMany(records)
 
 	ctx.Response.JSON(eel.Map{
 		"records": datas,
-		"pageinfo": nextPageInfo.ToMap(),
 	})
 }
 
