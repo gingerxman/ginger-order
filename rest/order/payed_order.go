@@ -3,6 +3,7 @@ package order
 import (
 	"fmt"
 	"github.com/gingerxman/eel"
+	"github.com/gingerxman/ginger-order/business/crm"
 	b_order "github.com/gingerxman/ginger-order/business/order"
 )
 
@@ -35,10 +36,8 @@ func (this *PayedOrder) Put(ctx *eel.Context) {
 	} else {
 		channel := req.GetString("channel", "weixin")
 		order.Pay(channel)
-		//if !order.IsFinished(){
-		//	channel := req.GetString("channel", "weixin")
-		//	order.Pay(channel)
-		//}
+		
+		crm.NewCrmService(bCtx).RecordOrder(order.Bid, order.Money.FinalMoney)
 		
 		ctx.Response.JSON(eel.Map{})
 	}
