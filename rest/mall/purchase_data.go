@@ -2,7 +2,6 @@ package mall
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business/mall/ship_info"
 	"github.com/gingerxman/ginger-order/business/product"
@@ -101,7 +100,6 @@ func (this *PurchaseData) getProductDatas(ctx *eel.Context) ([]*product.Product,
 		
 		//获取pool products
 		poolProducts := product.NewProductRepository(bCtx).GetProducts(poolProductIds)
-		spew.Dump(poolProducts)
 		id2product := make(map[int]*product.Product, 0)
 		for _, poolProduct := range poolProducts {
 			id2product[poolProduct.Id] = poolProduct

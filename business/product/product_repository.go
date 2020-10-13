@@ -3,7 +3,6 @@ package product
 import (
 	"context"
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gingerxman/eel"
 )
 
@@ -85,8 +84,43 @@ func (this *ProductRepository) GetProducts(ids []int) []*Product {
 	
 	respData := resp.Data()
 	productDatas := respData.Get("products")
-	spew.Dump(productDatas)
-	return this.makeProducts(productDatas.MustArray())
+	products := this.makeProducts(productDatas.MustArray())
+	
+	// 填充point product信息
+	{
+		id2product := make(map[int]*Product)
+		for _, product := range products {
+			id2product[product.Id] = product
+		}
+		
+		resp, err := eel.NewResource(this.Ctx).Get("ginger-promotion", "point.products", eel.Map{
+			"product_ids": eel.ToJsonString(ids),
+		})
+		
+		if err != nil {
+			eel.Logger.Error(err)
+			return products
+		}
+		
+		respData := resp.Data()
+		productDatas := respData.Get("products").MustArray()
+		for _, d := range productDatas {
+			productData := d.(map[string]interface{})
+			productId64, _ := productData["product_id"].(json.Number).Int64()
+			productId := int(productId64)
+			
+			if product, ok := id2product[productId]; ok {
+				pointPrice, _ := productData["point_price"].(json.Number).Int64()
+				moneyPrice, _ := productData["money_price"].(json.Number).Int64()
+				product.PointProductInfo = &sPointProductInfo{
+					PointPrice: int(pointPrice),
+					MoneyPrice: int(moneyPrice),
+				}
+			}
+		}
+	}
+	
+	return products
 }
 
 func (this *ProductRepository) UseSkuStocks(skuId int, count int) error {

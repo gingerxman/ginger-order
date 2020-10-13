@@ -27,6 +27,11 @@ type sLogisticsInfo struct {
 	UnifiedPostageMoney int `json:"unified_postage_money"`
 }
 
+type sPointProductInfo struct {
+	IsPointProduct bool
+	PointPrice int
+	MoneyPrice int
+}
 
 type Product struct {
 	eel.EntityBase
@@ -48,6 +53,9 @@ type Product struct {
 	ProductUsableImoneyId int //refer to product_usable_imoney
 	//ProductUsableImoney *ProductUsableImoney
 	Skus []*sku
+	
+	// 积分商品信息
+	PointProductInfo *sPointProductInfo
 }
 
 func (this *Product) GetSku(skuName string) *sku {
@@ -72,6 +80,18 @@ func (this *Product) CanPurchase() bool {
 	return this.Status == "on_shelf"
 }
 
+// IsPointProduct: 是否是积分商品
+func (this *Product) IsPointProduct() bool {
+	return this.PointProductInfo != nil
+}
+
+func (this *Product) GetPromotionType() string {
+	if this.IsPointProduct() {
+		return "point_product"
+	}
+	
+	return ""
+}
 
 func init() {
 }

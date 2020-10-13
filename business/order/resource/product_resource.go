@@ -36,7 +36,27 @@ func (this *ProductResource) GetDeductionMoney(deductableMoney int) int {
 }
 
 func (this *ProductResource) GetPrice() int {
-	return this.product.GetSku(this.Sku).Price * this.Count
+	if this.product.IsPointProduct() {
+		// 处理积分商品
+		// TODO: 进行通用化处理，修改为处理使用imoney的商品
+		pointProductInfo := this.product.PointProductInfo
+		return (pointProductInfo.PointPrice + pointProductInfo.MoneyPrice) * this.Count
+	} else {
+		// 处理正常商品
+		return this.product.GetSku(this.Sku).Price * this.Count
+	}
+}
+
+func (this *ProductResource) getUnitPrice() int {
+	if this.product.IsPointProduct() {
+		// 处理积分商品
+		// TODO: 进行通用化处理，修改为处理使用imoney的商品
+		pointProductInfo := this.product.PointProductInfo
+		return (pointProductInfo.PointPrice + pointProductInfo.MoneyPrice)
+	} else {
+		// 处理正常商品
+		return this.product.GetSku(this.Sku).Price
+	}
 }
 
 func (this *ProductResource) GetPostage() int {
@@ -70,14 +90,15 @@ func (this *ProductResource) ToMap() map[string]interface{} {
 	productInfo["id"] = product.Id
 	productInfo["name"] = product.Name
 	productInfo["thumbnail"] = product.Thumbnail
-	productInfo["price"] = sku.Price
+	productInfo["price"] = this.getUnitPrice()
 	productInfo["sku_name"] = this.Sku
 	productInfo["sku_display_name"] = sku.DisplayName
+	productInfo["promotion_type"] = this.product.GetPromotionType() // 促销类型
 	
 	productResourceInfo["type"] = this.GetType()
 	productResourceInfo["count"] = this.Count
-	productResourceInfo["total_price"] = this.Count * sku.Price
-	productResourceInfo["price"] = sku.Price
+	productResourceInfo["total_price"] = this.GetPrice()
+	productResourceInfo["price"] = this.getUnitPrice()
 	productResourceInfo["deduction_money"] = this.GetDeductionMoney(0)
 	productResourceInfo["product"] = productInfo
 	
@@ -96,7 +117,7 @@ func (this *ProductResource) SaveForOrder(order business.IOrder) error {
 	model.ProductName = product.Name
 	model.Thumbnail = product.Thumbnail
 	model.Count = this.Count
-	model.Price = sku.Price
+	model.Price = this.getUnitPrice()
 	model.ProductSkuName = this.Sku
 	model.ProductSkuDisplayName = sku.DisplayName
 	

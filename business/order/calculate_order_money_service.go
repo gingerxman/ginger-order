@@ -32,9 +32,9 @@ func (this *CalculateOrderMoneyService) Calculate(resources []business.IResource
 		}
 		
 		finalMoney += resourcePrice
-		deductionMoney = resource.GetDeductionMoney(newOrder.GetDeductableMoney())
-		finalMoney -= deductionMoney
-		deductionMoney += deductionMoney
+		resourceDeductionMoney := resource.GetDeductionMoney(newOrder.GetDeductableMoney())
+		finalMoney -= resourceDeductionMoney
+		deductionMoney += resourceDeductionMoney
 	}
 	
 	if finalMoney < 0 {

@@ -2,7 +2,6 @@ package order
 
 import (
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gingerxman/eel"
 	"github.com/gingerxman/ginger-order/business/account"
 	b_order "github.com/gingerxman/ginger-order/business/order"
@@ -86,7 +85,6 @@ func (this *Order) Get(ctx *eel.Context) {
 func (this *Order) Put(ctx *eel.Context) {
 	bCtx := ctx.GetBusinessContext()
 	purchaseInfo := this.parsePurchaseInfo(ctx)
-	spew.Dump(purchaseInfo)
 	
 	order, err := b_order.NewOrderFactory(bCtx).CreateOrder(purchaseInfo)
 	if err != nil {
