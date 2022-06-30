@@ -135,6 +135,66 @@ Scenario: 初始化系统数据
 					"stocks": 10
 				}
 			}
+		}, {
+			"name": "山城辣子鸡",
+			"category": "美味",
+			"detail": "山城辣子鸡的详情<div style='color:red'>真好吃</div><div><img src='http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/xia_2.jpg' /></div>",
+			"images": [{
+				"url": "http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/laziji.jpg"
+			}],
+			"skus": {
+				"standard": {
+					"price": 51.00,
+					"cost_price": 21.00,
+					"weight": 0.0,
+					"stocks": 10
+				}
+			}
+		}, {
+			"name": "麻婆豆腐",
+			"category": "美味",
+			"detail": "麻婆豆腐的详情<div style='color:red'>真好吃</div><div><img src='http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/xia_2.jpg' /></div>",
+			"images": [{
+				"url": "http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/doufu.jpg"
+			}],
+			"skus": {
+				"standard": {
+					"price": 52.00,
+					"cost_price": 22.00,
+					"weight": 0.0,
+					"stocks": 10
+				}
+			}
+		}, {
+			"name": "水煮鱼",
+			"category": "美味",
+			"detail": "水煮鱼详情<div style='color:red'>真好吃</div><div><img src='http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/xia_2.jpg' /></div>",
+			"images": [{
+				"url": "http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/shuizhuyu.jpeg"
+			}],
+			"skus": {
+				"standard": {
+					"price": 53.00,
+					"cost_price": 23.00,
+					"weight": 0.0,
+					"stocks": 10
+				}
+			}
+		}, {
+			"name": "川北凉粉",
+			"category": "美味",
+			"detail": "凉粉详情<div style='color:red'>真好吃</div><div><img src='http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/xia_2.jpg' /></div>",
+			"images": [{
+				"url": "http://vxiaocheng-jh.oss-cn-beijing.aliyuncs.com/peanut/liangfen.jpeg"
+			}],
+			"skus": {
+				"standard": {
+					"price": 54.00,
+					"cost_price": 24.00,
+					"weight": 0.0,
+					"stocks": 10
+				}
+			}
 		}]
 		"""
 
